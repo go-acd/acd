@@ -1,0 +1,56 @@
+{
+    "exclude": [
+        "(^Godeps/)",
+        "(^\\.arc/__*)",
+        "(^\\.arc/.*)",
+        "(^\\.gitmodules$)"
+    ],
+    "linters": {
+        "chmod": {
+            "type": "chmod"
+        },
+        "filename": {
+            "type": "filename"
+        },
+        "gofmt": {
+            "include": [
+                "(\\.go$)"
+            ],
+            "type": "gofmt"
+        },
+        "golint": {
+            "include": [
+                "(\\.go$)"
+            ],
+            "type": "golint"
+        },
+        "govet": {
+            "include": [
+                "(\\.go$)"
+            ],
+            "type": "govet"
+        },
+        "json": {
+            "include": [
+                "(^\\.arcconfig$)",
+                "(^\\.arclint$)",
+                "(\\.json$)"
+            ],
+            "type": "json"
+        },
+        "merge-conflict": {
+            "type": "merge-conflict"
+        },
+        "spelling": {
+            "type": "spelling"
+        },
+        "text": {
+            "exclude": [
+                "(\\.go$)",
+                "(^Makefile$)",
+                "(^.travis.yml$)"
+            ],
+            "type": "text"
+        }
+    }
+}

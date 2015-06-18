@@ -1,0 +1,8 @@
+{
+    "load": [
+        "../../github.com/dailymotion/arcanist-extensions"
+    ],
+    "phabricator.uri": "http://phabricator.nasreddine.com/",
+    "repository.callsign": "GOACD",
+    "unit.engine": "GoTestEngine"
+}

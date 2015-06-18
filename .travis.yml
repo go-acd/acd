@@ -1,0 +1,14 @@
+language: go
+go:
+  - 1.4
+  - tip
+matrix:
+  allow_failures:
+    - go: tip
+before_install:
+  - openssl aes-256-cbc -K $encrypted_dd8432a5ce2b_key -iv $encrypted_dd8432a5ce2b_iv
+    -in integrationtest/acd.json.enc -out integrationtest/acd.json -d
+  - chmod 0600 integrationtest/acd.json
+  - go get -u golang.org/x/tools/cmd/cover
+  - mkdir -p $GOPATH/src/gopkg.in && cd .. && mv ${TRAVIS_BUILD_DIR} $GOPATH/src/gopkg.in/acd.v0 && export TRAVIS_BUILD_DIR=$GOPATH/src/gopkg.in/acd.v0 && cd ${TRAVIS_BUILD_DIR}
+script: go test -v -race -cover -bench=. ./...
