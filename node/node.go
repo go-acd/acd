@@ -84,6 +84,11 @@ func (n *Node) IsDir() bool {
 	return n.Kind == "FOLDER"
 }
 
+// IsAsset returns whether the node represents an asset.
+func (n *Node) IsAsset() bool {
+	return n.Kind == "ASSET"
+}
+
 // Available returns true if the node is available
 func (n *Node) Available() bool {
 	return n.Status == "AVAILABLE"

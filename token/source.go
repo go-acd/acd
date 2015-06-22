@@ -1,4 +1,6 @@
-package token
+// Package token represents an oauth2.TokenSource which has the ability to
+// refresh the access token through the oauth server.
+package token // import "gopkg.in/acd.v0/token"
 
 import (
 	"bytes"
@@ -19,7 +21,8 @@ type Source struct {
 	token *oauth2.Token
 }
 
-// New returns a new Source implementing oauth2.TokenSource.
+// New returns a new Source implementing oauth2.TokenSource. The path must
+// exist on the filesystem and must be of permissions 0600.
 func New(path string) (*Source, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		log.Errorf("%s: %s", constants.ErrFileNotFound, path)
@@ -35,7 +38,9 @@ func New(path string) (*Source, error) {
 	return ts, nil
 }
 
-// Token returns an oauth2.Token
+// Token returns an oauth2.Token. If the cached token (in (*Source).path) has
+// expired, it will fetch the token from the server and cache it before
+// returning it.
 func (ts *Source) Token() (*oauth2.Token, error) {
 	if !ts.token.Valid() {
 		log.Debug("token is not valid")

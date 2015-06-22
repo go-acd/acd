@@ -1,4 +1,4 @@
-package client
+package acd
 
 import (
 	"crypto/md5"
@@ -9,9 +9,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"gopkg.in/acd.v0/client/node"
 	"gopkg.in/acd.v0/internal/constants"
 	"gopkg.in/acd.v0/internal/log"
+	"gopkg.in/acd.v0/node"
 )
 
 // Upload uploads io.Reader to the path defined by the filename. It will create

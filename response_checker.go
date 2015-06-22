@@ -1,4 +1,4 @@
-package client
+package acd
 
 import (
 	"io/ioutil"
@@ -8,7 +8,9 @@ import (
 	"gopkg.in/acd.v0/internal/log"
 )
 
-// CheckResponse validates the response.
+// CheckResponse validates the response from the Amazon Cloud Drive API. It
+// does that by looking at the response's status code and it returns an error
+// for any code lower than 200 or greater than 300
 func (c *Client) CheckResponse(res *http.Response) error {
 	if 200 <= res.StatusCode && res.StatusCode <= 299 {
 		return nil

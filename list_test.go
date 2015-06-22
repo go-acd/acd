@@ -1,10 +1,10 @@
-package client
+package acd
 
 import (
 	"reflect"
 	"testing"
 
-	"gopkg.in/acd.v0/client/node"
+	"gopkg.in/acd.v0/node"
 )
 
 func TestList(t *testing.T) {

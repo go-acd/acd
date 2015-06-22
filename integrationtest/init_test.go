@@ -13,7 +13,7 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/acd.v0/client"
+	"gopkg.in/acd.v0"
 	"gopkg.in/acd.v0/internal/constants"
 	"gopkg.in/acd.v0/internal/log"
 )
@@ -91,16 +91,16 @@ func newTempFile(baseName string) string {
 	return f.Name()
 }
 
-func newCachedClient(ncf bool) (*client.Client, error) {
+func newCachedClient(ncf bool) (*acd.Client, error) {
 	if ncf {
 		cacheFile = newTempFile("acd-cache-")
 		cacheFiles = append(cacheFiles, cacheFile)
 	}
-	return client.New(newConfigFile(cacheFile))
+	return acd.New(newConfigFile(cacheFile))
 }
 
-func newUncachedClient() (*client.Client, error) {
-	return client.New(newConfigFile(devNullCacheFile))
+func newUncachedClient() (*acd.Client, error) {
+	return acd.New(newConfigFile(devNullCacheFile))
 }
 
 func newConfigFile(cacheFile string) string {
@@ -125,7 +125,7 @@ func newConfigFile(cacheFile string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	config := &client.Config{
+	config := &acd.Config{
 		TokenFile: tokenFile,
 		CacheFile: cacheFile,
 	}

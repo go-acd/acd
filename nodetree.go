@@ -1,6 +1,6 @@
-package client
+package acd
 
-import "gopkg.in/acd.v0/client/node"
+import "gopkg.in/acd.v0/node"
 
 // FetchNodeTree fetches and caches the NodeTree.
 func (c *Client) FetchNodeTree() error {
