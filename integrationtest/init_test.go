@@ -89,7 +89,7 @@ func newCachedClient(ncf bool) (*client.Client, error) {
 	if ncf {
 		cacheFile = newTempFile("acd-cache-")
 	}
-	return acd.NewClient(newConfigFile(), cacheFile)
+	return acd.NewClient(newConfigFile(), 0, cacheFile)
 }
 
 func newConfigFile() string {
@@ -112,7 +112,7 @@ func newConfigFile() string {
 }
 
 func newUncachedClient() (*client.Client, error) {
-	return acd.NewClient(newConfigFile(), devNullCacheFile)
+	return acd.NewClient(newConfigFile(), 0, devNullCacheFile)
 }
 
 func removeTestFolder() error {

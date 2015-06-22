@@ -21,19 +21,19 @@ func (c *Client) GetContentURL(path string) string {
 func setEndpoints(c *Client) error {
 	req, err := http.NewRequest("GET", endpointURL, nil)
 	if err != nil {
-		log.Errorf("error creating the request: %s", err)
+		log.Errorf("%s: %s", constants.ErrCreatingHTTPRequest, err)
 		return constants.ErrCreatingHTTPRequest
 	}
 
 	var er endpointResponse
 	res, err := c.Do(req)
 	if err != nil {
-		log.Errorf("error fetching the endpoints: %s", err)
+		log.Errorf("%s: %s", constants.ErrDoingHTTPRequest, err)
 		return constants.ErrDoingHTTPRequest
 	}
 	defer res.Body.Close()
 	if err := json.NewDecoder(res.Body).Decode(&er); err != nil {
-		log.Errorf("error decoding the request body: %s", err)
+		log.Errorf("%s: %s", constants.ErrJSONDecodingResponseBody, err)
 		return constants.ErrJSONDecodingResponseBody
 	}
 

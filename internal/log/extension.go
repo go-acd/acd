@@ -56,6 +56,11 @@ func SetLevel(l Level) {
 	level = l
 }
 
+// GetLevel sets the log level to l.
+func GetLevel() Level {
+	return level
+}
+
 // Printf calls Printf only if the level is equal or lower than the set level.
 // If the level is FatalLevel, it will call Fatalf regardless...
 func Printf(l Level, format string, v ...interface{}) {

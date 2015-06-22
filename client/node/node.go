@@ -1,4 +1,4 @@
-package nodetree
+package node
 
 import (
 	"encoding/json"
@@ -60,7 +60,7 @@ type (
 		GetContentURL(string) string
 		Do(*http.Request) (*http.Response, error)
 		CheckResponse(*http.Response) error
-		GetNodeTree() *NodeTree
+		GetNodeTree() *Tree
 		GetTimeout() time.Duration
 	}
 )
@@ -116,7 +116,7 @@ func (n *Node) RemoveChild(child *Node) {
 }
 
 func (n *Node) update(newNode *Node) error {
-	// encode the newNode to JSON and back
+	// encode the newNode to JSON.
 	v, err := json.Marshal(newNode)
 	if err != nil {
 		log.Errorf("error encoding the node to JSON: %s", err)

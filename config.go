@@ -1,20 +1,18 @@
 package acd
 
 import (
-	"errors"
 	"os"
+	"time"
 
 	"gopkg.in/acd.v0/client"
 	"gopkg.in/acd.v0/client/token"
+	"gopkg.in/acd.v0/internal/constants"
+	"gopkg.in/acd.v0/internal/log"
 )
 
-var (
-	// ErrConfigWrongPermissions is returned if the configuration file has permission different than 0600.
-	ErrConfigWrongPermissions = errors.New("the config file should have 0600 permissions")
-)
-
-// NewClient initialize the token, creates a client and returns it to you.
-func NewClient(configFile, cacheFile string) (*client.Client, error) {
+// NewClient initialize the token, creates a client and returns it to you. A
+// timeout of 0 means no timeout.
+func NewClient(configFile string, timeout time.Duration, cacheFile string) (*client.Client, error) {
 	if err := validateConfigFile(configFile); err != nil {
 		return nil, err
 	}
@@ -24,7 +22,7 @@ func NewClient(configFile, cacheFile string) (*client.Client, error) {
 		return nil, err
 	}
 
-	c, err := client.New(ts, cacheFile)
+	c, err := client.New(ts, timeout, cacheFile)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +36,8 @@ func validateConfigFile(configFile string) error {
 		return err
 	}
 	if stat.Mode() != os.FileMode(0600) {
-		return ErrConfigWrongPermissions
+		log.Errorf("%s: want 0600 got %s", constants.ErrWrongPermissions, stat.Mode())
+		return constants.ErrWrongPermissions
 	}
 
 	return nil

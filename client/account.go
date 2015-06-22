@@ -78,19 +78,19 @@ func (c *Client) GetAccountInfo() (*AccountInfo, error) {
 	var ai AccountInfo
 	req, err := http.NewRequest("GET", c.metadataURL+"/account/info", nil)
 	if err != nil {
-		log.Errorf("error creating the request: %s", err)
+		log.Errorf("%s: %s", constants.ErrCreatingHTTPRequest, err)
 		return nil, constants.ErrCreatingHTTPRequest
 	}
 
 	res, err := c.Do(req)
 	if err != nil {
-		log.Errorf("error fetching the account info: %s", err)
+		log.Errorf("%s: %s", constants.ErrDoingHTTPRequest, err)
 		return nil, constants.ErrDoingHTTPRequest
 	}
 
 	defer res.Body.Close()
 	if err := json.NewDecoder(res.Body).Decode(&ai); err != nil {
-		log.Errorf("error decoding the request body: %s", err)
+		log.Errorf("%s: %s", constants.ErrJSONDecodingResponseBody, err)
 		return nil, constants.ErrJSONDecodingResponseBody
 	}
 
@@ -102,19 +102,19 @@ func (c *Client) GetAccountQuota() (*AccountQuota, error) {
 	var aq AccountQuota
 	req, err := http.NewRequest("GET", c.metadataURL+"/account/quota", nil)
 	if err != nil {
-		log.Errorf("error creating the request: %s", err)
+		log.Errorf("%s: %s", constants.ErrCreatingHTTPRequest, err)
 		return nil, constants.ErrCreatingHTTPRequest
 	}
 
 	res, err := c.Do(req)
 	if err != nil {
-		log.Errorf("error fetching the account info: %s", err)
+		log.Errorf("%s: %s", constants.ErrDoingHTTPRequest, err)
 		return nil, constants.ErrDoingHTTPRequest
 	}
 
 	defer res.Body.Close()
 	if err := json.NewDecoder(res.Body).Decode(&aq); err != nil {
-		log.Errorf("error decoding the request body: %s", err)
+		log.Errorf("%s: %s", constants.ErrJSONDecodingResponseBody, err)
 		return nil, constants.ErrJSONDecodingResponseBody
 	}
 
@@ -126,19 +126,19 @@ func (c *Client) GetAccountUsage() (*AccountUsage, error) {
 	var au AccountUsage
 	req, err := http.NewRequest("GET", c.metadataURL+"/account/usage", nil)
 	if err != nil {
-		log.Errorf("error creating the request: %s", err)
+		log.Errorf("%s: %s", constants.ErrCreatingHTTPRequest, err)
 		return nil, constants.ErrCreatingHTTPRequest
 	}
 
 	res, err := c.Do(req)
 	if err != nil {
-		log.Errorf("error fetching the account info: %s", err)
+		log.Errorf("%s: %s", constants.ErrDoingHTTPRequest, err)
 		return nil, constants.ErrDoingHTTPRequest
 	}
 
 	defer res.Body.Close()
 	if err := json.NewDecoder(res.Body).Decode(&au); err != nil {
-		log.Errorf("error decoding the request body: %s", err)
+		log.Errorf("%s: %s", constants.ErrJSONDecodingResponseBody, err)
 		return nil, constants.ErrJSONDecodingResponseBody
 	}
 

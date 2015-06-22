@@ -1,4 +1,4 @@
-package nodetree
+package node
 
 import (
 	"encoding/gob"
@@ -8,7 +8,7 @@ import (
 	"gopkg.in/acd.v0/internal/log"
 )
 
-func (nt *NodeTree) loadCache() error {
+func (nt *Tree) loadCache() error {
 	f, err := os.Open(nt.cacheFile)
 	if err != nil {
 		log.Debugf("error opening the cache file %q: %s", nt.cacheFile, constants.ErrLoadingCache)
@@ -20,10 +20,12 @@ func (nt *NodeTree) loadCache() error {
 	}
 	log.Debugf("loaded NodeTree from cache file %q.", nt.cacheFile)
 	nt.setClient(nt.Node)
+	nt.buildNodeMap(nt.Node)
 
 	return nil
 }
-func (nt *NodeTree) saveCache() error {
+
+func (nt *Tree) saveCache() error {
 	f, err := os.Create(nt.cacheFile)
 	if err != nil {
 		log.Errorf("%s: %s", constants.ErrCreateFile, nt.cacheFile)

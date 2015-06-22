@@ -1,4 +1,4 @@
-package nodetree
+package node
 
 import "time"
 
@@ -76,7 +76,7 @@ var (
 	// |-- pictures
 	// |-- |
 	//     | -- logo.png
-	Mocked = &NodeTree{
+	Mocked = &Tree{
 		Node: rootNode,
 		nodeMap: map[string]*Node{
 			"/":                  rootNode,

@@ -10,9 +10,11 @@ import (
 	"gopkg.in/acd.v0/internal/log"
 )
 
-// Download returns an io.ReadCloser for the file specified by the path. The
-// caller is responsible for closing the body.
+// Download returns an io.ReadCloser for path. The caller is responsible for
+// closing the body.
 func (c *Client) Download(path string) (io.ReadCloser, error) {
+	log.Debugf("downloading %q", path)
+
 	node, err := c.NodeTree.FindNode(path)
 	if err != nil {
 		return nil, err

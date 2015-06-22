@@ -4,12 +4,12 @@ import (
 	"reflect"
 	"testing"
 
-	"gopkg.in/acd.v0/client/nodetree"
+	"gopkg.in/acd.v0/client/node"
 )
 
 func TestList(t *testing.T) {
 	c := &Client{
-		NodeTree: nodetree.Mocked,
+		NodeTree: node.Mocked,
 	}
 
 	tests := map[string][]string{

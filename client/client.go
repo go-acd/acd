@@ -5,13 +5,13 @@ import (
 	"time"
 
 	"golang.org/x/oauth2"
-	"gopkg.in/acd.v0/client/nodetree"
+	"gopkg.in/acd.v0/client/node"
 )
 
 type (
 	// Client provides a client for Amazon Cloud Drive.
 	Client struct {
-		NodeTree *nodetree.NodeTree
+		NodeTree *node.Tree
 
 		httpClient  *http.Client
 		timeout     time.Duration
@@ -28,20 +28,18 @@ type (
 	}
 )
 
-var (
-	// DefaultTimeout defines the default timeout of the client.
-	DefaultTimeout = 10 * time.Hour
-	endpointURL    = "https://drive.amazonaws.com/drive/v1/account/endpoint"
+const (
+	endpointURL = "https://drive.amazonaws.com/drive/v1/account/endpoint"
 )
 
-// New returns a new Amazon Cloud Drive "acd" Client.
-func New(src oauth2.TokenSource, cacheFile string) (*Client, error) {
+// New returns a new Amazon Cloud Drive "acd" Client. A timeout of 0 means no timeout.
+func New(src oauth2.TokenSource, timeout time.Duration, cacheFile string) (*Client, error) {
 	c := &Client{
 		tokenSource: src,
-		timeout:     DefaultTimeout,
+		timeout:     timeout,
 		cacheFile:   cacheFile,
 		httpClient: &http.Client{
-			Timeout: DefaultTimeout,
+			Timeout: timeout,
 			Transport: &oauth2.Transport{
 				Source: oauth2.ReuseTokenSource(nil, src),
 			},

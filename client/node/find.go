@@ -1,4 +1,4 @@
-package nodetree
+package node
 
 import (
 	"os"
@@ -9,7 +9,9 @@ import (
 )
 
 // FindNode finds a node for a particular path.
-func (nt *NodeTree) FindNode(path string) (*Node, error) {
+// TODO(kalbasit): This does not perform well, this should be cached in a map
+// path->node and calculated on load (fresh, cache, refresh).
+func (nt *Tree) FindNode(path string) (*Node, error) {
 	// chop off the first PathSeparator.
 	if strings.HasPrefix(path, string(os.PathSeparator)) {
 		path = path[1:]
@@ -46,7 +48,7 @@ func (nt *NodeTree) FindNode(path string) (*Node, error) {
 }
 
 // FindByID returns the node identified by the ID.
-func (nt *NodeTree) FindByID(id string) (*Node, error) {
+func (nt *Tree) FindByID(id string) (*Node, error) {
 	n, found := nt.nodeMap[id]
 	if !found {
 		log.Errorf("%s: ID %q", constants.ErrNodeNotFound, id)

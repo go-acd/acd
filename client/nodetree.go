@@ -1,10 +1,10 @@
 package client
 
-import "gopkg.in/acd.v0/client/nodetree"
+import "gopkg.in/acd.v0/client/node"
 
-// FetchNodeTree fetches and caches the NodeTree
+// FetchNodeTree fetches and caches the NodeTree.
 func (c *Client) FetchNodeTree() error {
-	nt, err := nodetree.New(c, c.cacheFile)
+	nt, err := node.NewTree(c, c.cacheFile)
 	if err != nil {
 		return err
 	}
@@ -14,6 +14,6 @@ func (c *Client) FetchNodeTree() error {
 }
 
 // GetNodeTree returns the NodeTree.
-func (c *Client) GetNodeTree() *nodetree.NodeTree {
+func (c *Client) GetNodeTree() *node.Tree {
 	return c.NodeTree
 }

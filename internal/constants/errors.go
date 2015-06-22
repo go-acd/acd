@@ -83,8 +83,8 @@ var (
 	ErrCannotCreateRootNode = errors.New("root node cannot be created")
 	// ErrLoadingCache is returned when an error happens while loading from cacheFile
 	ErrLoadingCache = errors.New("error loading from the cache file")
-	// ErrMustRefresh is returned if the changes API requested a change.
-	ErrMustRefresh = errors.New("must refresh the node tree")
+	// ErrMustFetchFresh is returned if the changes API requested a change.
+	ErrMustFetchFresh = errors.New("must refresh the node tree")
 	// ErrCannotCreateANodeUnderAFile is returned if you attempt to create a
 	// folder/file under an existing file.
 	ErrCannotCreateANodeUnderAFile = errors.New("cannot create a node under a file")
@@ -102,8 +102,14 @@ var (
 	ErrCreateFile = errors.New("error creating and/or truncating a file")
 	// ErrCreateFolder is returned if an error occurred when trying to create a folder.
 	ErrCreateFolder = errors.New("error creating a folder")
+	// ErrFileExists is returned if the file already exists (on the server or locally).
+	ErrFileExists = errors.New("the file already exists")
 	// ErrFileNotFound is returned if no such file or directory.
 	ErrFileNotFound = errors.New("no such file or directory")
 	// ErrPathIsNotFolder is returned if the path is not a folder.
 	ErrPathIsNotFolder = errors.New("path is not a folder")
+	// ErrPathIsFolder is returned if the path is a folder.
+	ErrPathIsFolder = errors.New("path is a folder")
+	// ErrWrongPermissions is returned if the file has the wrong permissions.
+	ErrWrongPermissions = errors.New("file has wrong permissions")
 )
