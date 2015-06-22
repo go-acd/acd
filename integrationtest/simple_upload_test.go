@@ -9,6 +9,11 @@ import (
 )
 
 func TestSimpleUpload(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping integration test")
+	}
+	needCleaning = true
+
 	var (
 		readmeFile       = "fixtures/README"
 		remoteReadmeFile = remotePath(readmeFile)

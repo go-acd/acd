@@ -12,14 +12,29 @@ import (
 )
 
 func TestSimpleFolderUpload(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping integration test")
+	}
+	needCleaning = true
+
 	testUploadFolder(t, "fixtures/simplefolder", false, false)
 }
 
 func TestRecursiveFolderUpload(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping integration test")
+	}
+	needCleaning = true
+
 	testUploadFolder(t, "fixtures/recursivefolder", true, false)
 }
 
 func TestConflictFolderUpload(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping integration test")
+	}
+	needCleaning = true
+
 	testUploadFolder(t, "fixtures/conflictfolder/v1", true, false)
 	testUploadFolder(t, "fixtures/conflictfolder/v2", true, true)
 }

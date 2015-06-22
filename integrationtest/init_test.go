@@ -29,6 +29,7 @@ var (
 	cacheFiles     []string
 	configFiles    []string
 	testFolderPath string
+	needCleaning   bool
 )
 
 func TestMain(m *testing.M) {
@@ -55,13 +56,15 @@ func TestMain(m *testing.M) {
 }
 
 func cleanUp() {
-	// remove the test folder
-	if err := removeTestFolder(); err != nil {
-		log.Errorf("error removing the test folder: %s", err)
-	}
+	if needCleaning {
+		// remove the test folder
+		if err := removeTestFolder(); err != nil {
+			log.Errorf("error removing the test folder: %s", err)
+		}
 
-	// unassign testFolderPath so we do not try to remove it again if we panic!
-	testFolderPath = ""
+		// avoid double cleaning
+		needCleaning = false
+	}
 
 	// remove all cache files
 	for _, cf := range cacheFiles {
@@ -113,10 +116,6 @@ func newUncachedClient() (*client.Client, error) {
 }
 
 func removeTestFolder() error {
-	if testFolderPath == "" {
-		return nil
-	}
-
 	c, err := newUncachedClient()
 	if err != nil {
 		return err

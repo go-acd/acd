@@ -104,4 +104,6 @@ var (
 	ErrCreateFolder = errors.New("error creating a folder")
 	// ErrFileNotFound is returned if no such file or directory.
 	ErrFileNotFound = errors.New("no such file or directory")
+	// ErrPathIsNotFolder is returned if the path is not a folder.
+	ErrPathIsNotFolder = errors.New("path is not a folder")
 )

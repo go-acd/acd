@@ -130,17 +130,6 @@ func (nt *NodeTree) Close() error {
 	return nt.saveCache()
 }
 
-// FindByID returns the node identified by the ID.
-func (nt *NodeTree) FindByID(id string) (*Node, error) {
-	n, found := nt.nodeMap[id]
-	if !found {
-		log.Errorf("%s: ID %q", constants.ErrNodeNotFound, id)
-		return nil, constants.ErrNodeNotFound
-	}
-
-	return n, nil
-}
-
 func (nt *NodeTree) fetchFresh() error {
 	// grab the list of all of the nodes from the server.
 	var nextToken string
@@ -199,7 +188,7 @@ func (nt *NodeTree) fetchFresh() error {
 	}
 
 	for _, node := range nodeMap {
-		if node.Name == "" && node.IsFolder() && len(node.Parents) == 0 {
+		if node.Name == "" && node.IsDir() && len(node.Parents) == 0 {
 			nt.Node = node
 			node.Root = true
 		}
@@ -225,48 +214,11 @@ func (nt *NodeTree) buildNodeMap(current *Node) {
 	}
 }
 
-// FindNode finds a node for a particular path.
-func (nt *NodeTree) FindNode(path string) (*Node, error) {
-	// chop off the first PathSeparator.
-	if strings.HasPrefix(path, string(os.PathSeparator)) {
-		path = path[1:]
-	}
-
-	// initialize our search from the root node
-	node := nt.Node
-
-	// are we looking for the root node?
-	if path == "" {
-		return node, nil
-	}
-
-	// iterate over the path parts until we find the path (or not).
-	parts := strings.Split(path, string(os.PathSeparator))
-	for _, part := range parts {
-		var found bool
-		for _, n := range node.Nodes {
-			// does node.name matches our query?
-			if n.Name == part {
-				node = n
-				found = true
-				break
-			}
-		}
-
-		if !found {
-			log.Errorf("%s: %s", constants.ErrNodeNotFound, path)
-			return nil, constants.ErrNodeNotFound
-		}
-	}
-
-	return node, nil
-}
-
 // CreatePath creates a folder under the given path.
 func (nt *NodeTree) CreatePath(path string) (*Node, error) {
 	// Short-circuit if the node already exists!
 	if n, err := nt.FindNode(path); err == nil {
-		if n.IsFolder() {
+		if n.IsDir() {
 			return n, err
 		}
 		log.Errorf("%s: %s", constants.ErrFileExistsAndIsNotFolder, path)
@@ -301,7 +253,7 @@ func (nt *NodeTree) CreatePath(path string) (*Node, error) {
 			}
 		}
 
-		if !nextNode.IsFolder() {
+		if !nextNode.IsDir() {
 			log.Errorf("%s: %s", constants.ErrCannotCreateANodeUnderAFile, strings.Join(parts[:i+1], string(os.PathSeparator)))
 			return nil, constants.ErrCannotCreateANodeUnderAFile
 		}

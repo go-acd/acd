@@ -13,30 +13,33 @@ type (
 	// Nodes is a slice of nodes
 	Nodes []*Node
 
+	// ContentProperties hold the properties of the node.
+	ContentProperties struct {
+		Version     uint64    `json:"version,omitempty"`
+		Extension   string    `json:"extension,omitempty"`
+		Size        uint64    `json:"size,omitempty"`
+		MD5         string    `json:"md5,omitempty"`
+		ContentType string    `json:"contentType,omitempty"`
+		ContentDate time.Time `json:"contentDate,omitempty"`
+	}
+
 	// Node represents a digital asset on the Amazon Cloud Drive, including files
 	// and folders, in a parent-child relationship. A node contains only metadata
 	// (e.g. folder) or it contains metadata and content (e.g. file).
 	Node struct {
 		// Coming from Amazon
-		ID                string    `json:"id,omitempty"`
-		Name              string    `json:"name,omitempty"`
-		Kind              string    `json:"kind,omitempty"`
-		Parents           []string  `json:"Parents,omitempty"`
-		Status            string    `json:"status,omitempty"`
-		Labels            []string  `json:"labels,omitempty"`
-		CreatedBy         string    `json:"createdBy,omitempty"`
-		CreationDate      time.Time `json:"creationDate,omitempty"`
-		ModifiedDate      time.Time `json:"modifiedDate,omitempty"`
-		Version           uint64    `json:"version,omitempty"`
-		TempLink          string    `json:"tempLink,omitempty"`
-		ContentProperties struct {
-			Version     uint64    `json:"version,omitempty"`
-			Extension   string    `json:"extension,omitempty"`
-			Size        uint64    `json:"size,omitempty"`
-			MD5         string    `json:"md5,omitempty"`
-			ContentType string    `json:"contentType,omitempty"`
-			ContentDate time.Time `json:"contentDate,omitempty"`
-		} `json:"contentProperties,omitempty"`
+		ID                string            `json:"id,omitempty"`
+		Name              string            `json:"name,omitempty"`
+		Kind              string            `json:"kind,omitempty"`
+		Parents           []string          `json:"Parents,omitempty"`
+		Status            string            `json:"status,omitempty"`
+		Labels            []string          `json:"labels,omitempty"`
+		CreatedBy         string            `json:"createdBy,omitempty"`
+		CreationDate      time.Time         `json:"creationDate,omitempty"`
+		ModifiedDate      time.Time         `json:"modifiedDate,omitempty"`
+		Version           uint64            `json:"version,omitempty"`
+		TempLink          string            `json:"tempLink,omitempty"`
+		ContentProperties ContentProperties `json:"contentProperties,omitempty"`
 
 		// Internal
 		Nodes  Nodes `json:"nodes,omitempty"`
@@ -62,13 +65,23 @@ type (
 	}
 )
 
+// Size returns the size of the node.
+func (n *Node) Size() int64 {
+	return int64(n.ContentProperties.Size)
+}
+
+// ModTime returns the last modified time of the node.
+func (n *Node) ModTime() time.Time {
+	return n.ModifiedDate
+}
+
 // IsFile returns whether the node represents a file.
 func (n *Node) IsFile() bool {
 	return n.Kind == "FILE"
 }
 
-// IsFolder returns whether the node represents a folder.
-func (n *Node) IsFolder() bool {
+// IsDir returns whether the node represents a folder.
+func (n *Node) IsDir() bool {
 	return n.Kind == "FOLDER"
 }
 

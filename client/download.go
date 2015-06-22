@@ -37,7 +37,7 @@ func (c *Client) DownloadFolder(localPath, remotePath string, recursive bool) er
 	for _, node := range rootNode.Nodes {
 		flp := path.Join(localPath, node.Name)
 		frp := fmt.Sprintf("%s/%s", remotePath, node.Name)
-		if node.IsFolder() {
+		if node.IsDir() {
 			if recursive {
 				if err := c.DownloadFolder(flp, frp, recursive); err != nil {
 					return err

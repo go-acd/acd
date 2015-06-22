@@ -81,7 +81,7 @@ func (c *Client) uploadFolderFunc(localPath, remoteBasePath string, recursive, o
 
 		// does the file already exist?
 		if fileNode, err := c.NodeTree.FindNode(remoteFilename); err == nil {
-			if fileNode.IsFolder() {
+			if fileNode.IsDir() {
 				log.Errorf("%s: remoteFilename %q", constants.ErrFileExistsAndIsFolder, remoteFilename)
 				return constants.ErrFileExistsAndIsFolder
 			}
