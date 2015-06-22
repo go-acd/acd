@@ -152,6 +152,8 @@ func remotePath(fp string) string {
 	return fmt.Sprintf("%s/%s", testFolderPath, p)
 }
 
+// listFiles returns the list of all of the files in folder and it's subfolders
+// but it does not include the subfolders as entries.
 func listFiles(folder string) []string {
 	var files []string
 	filepath.Walk(folder, func(fp string, info os.FileInfo, err error) error {

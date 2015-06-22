@@ -100,6 +100,8 @@ var (
 	ErrOpenFile = errors.New("error opening the file for reading")
 	// ErrCreateFile is returned if an error is returned when trying to create a file
 	ErrCreateFile = errors.New("error creating and/or truncating a file")
+	// ErrCreateFolder is returned if an error occurred when trying to create a folder.
+	ErrCreateFolder = errors.New("error creating a folder")
 	// ErrFileNotFound is returned if no such file or directory.
 	ErrFileNotFound = errors.New("no such file or directory")
 )

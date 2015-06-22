@@ -2,8 +2,6 @@ package nodetree
 
 import (
 	"encoding/json"
-	"fmt"
-	"io"
 	"net/http"
 	"time"
 
@@ -77,25 +75,6 @@ func (n *Node) IsFolder() bool {
 // Available returns true if the node is available
 func (n *Node) Available() bool {
 	return n.Status == "AVAILABLE"
-}
-
-// Download returns an io.ReadCloser. The caller is responsible for closing the
-// body.
-func (n *Node) Download() (io.ReadCloser, error) {
-	url := n.client.GetContentURL(fmt.Sprintf("nodes/%s/content", n.ID))
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		log.Errorf("error creating download request: %s", err)
-		return nil, constants.ErrCreatingHTTPRequest
-	}
-
-	res, err := n.client.Do(req)
-	if err != nil {
-		log.Errorf("error downloading the file: %s", err)
-		return nil, constants.ErrDoingHTTPRequest
-	}
-
-	return res.Body, nil
 }
 
 // AddChild add a new child for the node

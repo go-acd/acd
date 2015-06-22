@@ -5,7 +5,9 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"path"
 	"testing"
 )
 
@@ -89,6 +91,32 @@ func testUploadFolder(t *testing.T, localFolder string, recursive, overwrite boo
 		}
 	}
 
-	// check the folder exists on the server
-	// TODO: implement DownloadFolder
+	// download the folder from the server and verify the contents byte-per-byte
+	localPath, err := ioutil.TempDir("", "acd-folder-upload-test-")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := c.DownloadFolder(localPath, remoteFolder, recursive); err != nil {
+		t.Errorf("c.DownloadFolder(%s, %s, %t) error: %s", localPath, remoteFolder, recursive, err)
+	}
+	for _, file := range files {
+		localFile := path.Join(localPath, file)
+		f, err := os.Open(localFile)
+		if err != nil {
+			if os.IsNotExist(err) {
+				t.Errorf("cannot open the downloaded file at %s: does not exist", localFile)
+			} else {
+				t.Errorf("cannot open the downloaded file at %s: %s", localFile, err)
+			}
+		}
+		hash := md5.New()
+		io.Copy(hash, f)
+
+		if want, got := md5s[file], hex.EncodeToString(hash.Sum(nil)); want != got {
+			t.Errorf("c.DownloadFolder(%s, %s, %t), md5 of %s: want %s got %s", localPath, remoteFolder, recursive, localFile, want, got)
+		}
+	}
+	if err := os.RemoveAll(localPath); err != nil {
+		t.Logf("error removing the temporary folder %q, please remove it manually: %s", localPath, err)
+	}
 }
