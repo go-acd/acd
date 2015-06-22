@@ -1,3 +1,5 @@
+//go:generate stringer -type=Level
+
 // Package log provides a common logging package for ACD with logging level.
 package log
 
@@ -37,14 +39,6 @@ var (
 		InfoLevel:       "[INFO] ",
 		DebugLevel:      "[DEBUG] ",
 	}
-
-	levelString = map[Level]string{
-		DisableLogLevel: "Disable",
-		FatalLevel:      "Fatal",
-		ErrorLevel:      "Error",
-		InfoLevel:       "Info",
-		DebugLevel:      "Debug",
-	}
 )
 
 // Levels returns a string of all possible levels
@@ -60,10 +54,6 @@ func Levels() string {
 // SetLevel sets the log level to l.
 func SetLevel(l Level) {
 	level = l
-}
-
-func (l Level) String() string {
-	return levelString[l]
 }
 
 // Printf calls Printf only if the level is equal or lower than the set level.
