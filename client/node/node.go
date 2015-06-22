@@ -61,7 +61,6 @@ type (
 		Do(*http.Request) (*http.Response, error)
 		CheckResponse(*http.Response) error
 		GetNodeTree() *Tree
-		GetTimeout() time.Duration
 	}
 )
 

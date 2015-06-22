@@ -4,7 +4,7 @@
 *.so
 
 cmd/acd/acd
-integrationtest/acd.json
+integrationtest/acd-token.json
 
 # Folders
 _obj

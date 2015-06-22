@@ -1,6 +1,7 @@
 package integrationtest
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -20,13 +21,14 @@ import (
 const (
 	devNullCacheFile   string = "/dev/null"
 	testFolderBasePath string = "/acd_test_folder"
-	baseConfigFile     string = "acd.json"
+	baseTokenFile      string = "acd-token.json"
 )
 
 var (
 	cacheFile      string
 	cacheFiles     []string
 	configFiles    []string
+	tokenFiles     []string
 	testFolderPath string
 	needCleaning   bool
 )
@@ -39,6 +41,7 @@ func TestMain(m *testing.M) {
 	}()
 
 	cacheFile = newTempFile("acd-cache-")
+	cacheFiles = append(cacheFiles, cacheFile)
 	testFolderPath = fmt.Sprintf("%s/%d", testFolderBasePath, time.Now().UnixNano())
 
 	// disable all logs
@@ -74,44 +77,64 @@ func cleanUp() {
 	for _, cf := range configFiles {
 		os.Remove(cf)
 	}
+
+	// remove all token files.
+	for _, cf := range tokenFiles {
+		os.Remove(cf)
+	}
 }
 
 func newTempFile(baseName string) string {
 	f, _ := ioutil.TempFile("", baseName)
 	f.Close()
 	os.Remove(f.Name())
-	cacheFiles = append(cacheFiles, f.Name())
 	return f.Name()
 }
 
 func newCachedClient(ncf bool) (*client.Client, error) {
 	if ncf {
 		cacheFile = newTempFile("acd-cache-")
+		cacheFiles = append(cacheFiles, cacheFile)
 	}
-	return client.New(newConfigFile(), cacheFile, 0)
+	return client.New(newConfigFile(cacheFile))
 }
 
-func newConfigFile() string {
+func newUncachedClient() (*client.Client, error) {
+	return client.New(newConfigFile(devNullCacheFile))
+}
+
+func newConfigFile(cacheFile string) string {
+	tokenFile := newTempFile("acd-token-")
+	tokenFiles = append(tokenFiles, tokenFile)
 	configFile := newTempFile("acd-config-")
 	configFiles = append(configFiles, configFile)
 
-	of, err := os.Open(baseConfigFile)
+	of, err := os.Open(baseTokenFile)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer of.Close()
-	nf, err := os.OpenFile(configFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
+	nf, err := os.OpenFile(tokenFile, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0600)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer nf.Close()
 	io.Copy(nf, of)
 
-	return configFile
-}
+	cf, err := os.Create(configFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+	config := &client.Config{
+		TokenFile: tokenFile,
+		CacheFile: cacheFile,
+	}
+	defer cf.Close()
+	if err := json.NewEncoder(cf).Encode(config); err != nil {
+		log.Fatal(err)
+	}
 
-func newUncachedClient() (*client.Client, error) {
-	return client.New(newConfigFile(), devNullCacheFile, 0)
+	return configFile
 }
 
 func removeTestFolder() error {
