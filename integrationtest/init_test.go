@@ -12,7 +12,6 @@ import (
 	"testing"
 	"time"
 
-	"gopkg.in/acd.v0"
 	"gopkg.in/acd.v0/client"
 	"gopkg.in/acd.v0/internal/constants"
 	"gopkg.in/acd.v0/internal/log"
@@ -89,7 +88,7 @@ func newCachedClient(ncf bool) (*client.Client, error) {
 	if ncf {
 		cacheFile = newTempFile("acd-cache-")
 	}
-	return acd.NewClient(newConfigFile(), 0, cacheFile)
+	return client.New(newConfigFile(), cacheFile, 0)
 }
 
 func newConfigFile() string {
@@ -112,7 +111,7 @@ func newConfigFile() string {
 }
 
 func newUncachedClient() (*client.Client, error) {
-	return acd.NewClient(newConfigFile(), 0, devNullCacheFile)
+	return client.New(newConfigFile(), devNullCacheFile, 0)
 }
 
 func removeTestFolder() error {

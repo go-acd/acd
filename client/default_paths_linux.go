@@ -1,4 +1,4 @@
-package acd
+package client
 
 import (
 	"os"
@@ -17,5 +17,5 @@ func DefaultConfigFile() string {
 // DefaultCacheFile returns the default path for the cache file.
 func DefaultCacheFile() string {
 	homePath := os.Getenv("HOME")
-	return path.Join(homePath, "Library", "Caches", cacheFilename)
+	return path.Join(homePath, ".cache", cacheFilename)
 }
