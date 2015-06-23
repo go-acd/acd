@@ -31,20 +31,6 @@ type (
 		NextToken    string  `json:"nextToken,omitempty"`
 		Nodes        []*Node `json:"data,omitempty"`
 	}
-
-	changes struct {
-		Checkpoint    string `json:"checkpoint,omitempty"`
-		Chunksize     int    `json:"chunkSize,omitempty"`
-		MaxNodes      int    `json:"maxNodes,omitempty"`
-		IncludePurged string `json:"includePurged,omitempty"`
-	}
-
-	changesResponse struct {
-		Checkpoint string  `json:"checkpoint,omitempty"`
-		Nodes      []*Node `json:"nodes,omitempty"`
-		Reset      bool    `json:"reset,omitempty"`
-		End        bool    `json:"end,omitempty"`
-	}
 )
 
 // RemoveNode removes this node from the server and from the NodeTree.

@@ -45,10 +45,10 @@ func TestSimpleUpload(t *testing.T) {
 	// test the NodeTree is updated
 	node, err := c.NodeTree.FindNode(remoteReadmeFile)
 	if err != nil {
-		t.Errorf("c.NodeTree.FindNode(%s): got error %s", remoteReadmeFile, err)
+		t.Errorf("c.NodeTree.FindNode(%q): got error %s", remoteReadmeFile, err)
 	}
 	if want, got := inmd5, node.ContentProperties.MD5; want != got {
-		t.Errorf("c.NodeTree.FindNode(%s).ContentProperties.MD5: want %s got %s", remoteReadmeFile, want, got)
+		t.Errorf("c.NodeTree.FindNode(%q).ContentProperties.MD5: want %s got %s", remoteReadmeFile, want, got)
 	}
 
 	// test the cache is being saved updated
@@ -62,10 +62,10 @@ func TestSimpleUpload(t *testing.T) {
 	}
 	node, err = c.NodeTree.FindNode(remoteReadmeFile)
 	if err != nil {
-		t.Errorf("reloaded cache, c.NodeTree.FindNode(%s): got error %s", remoteReadmeFile, err)
+		t.Errorf("reloaded cache, c.NodeTree.FindNode(%q): got error %s", remoteReadmeFile, err)
 	}
 	if want, got := inmd5, node.ContentProperties.MD5; want != got {
-		t.Errorf("reloaded cache, c.NodeTree.FindNode(%s).ContentProperties.MD5: want %s got %s", remoteReadmeFile, want, got)
+		t.Errorf("reloaded cache, c.NodeTree.FindNode(%q).ContentProperties.MD5: want %s got %s", remoteReadmeFile, want, got)
 	}
 
 	// check the file exists on the server

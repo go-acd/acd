@@ -25,6 +25,8 @@ var (
 	// ErrJSONDecodingResponseBody is returned if there was an error decoding the
 	// response body.
 	ErrJSONDecodingResponseBody = errors.New("error while JSON-decoding the response body")
+	// ErrReadingResponseBody is returned if ioutil.ReadAll() has failed.
+	ErrReadingResponseBody = errors.New("error reading the entire response body")
 
 	// Request errors
 
