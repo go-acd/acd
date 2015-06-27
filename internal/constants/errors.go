@@ -100,6 +100,8 @@ var (
 
 	// File-related errors
 
+	// ErrStatFile is returned if there was an error getting info about the file.
+	ErrStatFile = errors.New("error stat() the file")
 	// ErrOpenFile is returned if an error occurred while opening the file for reading
 	ErrOpenFile = errors.New("error opening the file for reading")
 	// ErrCreateFile is returned if an error is returned when trying to create a file

@@ -8,6 +8,11 @@ import (
 	"gopkg.in/acd.v0/internal/log"
 )
 
+// TODO(kalbasit): I do not like this API code not even a bit.
+// a) I used codegangsta/cli wrong or overthought it.
+// b) codegangsta/cli is not the right library for this project.
+// This entire package should be re-written and TESTED!.
+
 var (
 	commands  []cli.Command
 	acdClient *acd.Client

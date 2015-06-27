@@ -127,7 +127,12 @@ func loadConfig(configFile string) (*Config, error) {
 func validateFile(file string, checkPerms bool) error {
 	stat, err := os.Stat(file)
 	if err != nil {
-		return err
+		if os.IsNotExist(err) {
+			log.Errorf("%s: %s -- %s", constants.ErrFileNotFound, err, file)
+			return constants.ErrFileNotFound
+		}
+		log.Errorf("%s: %s -- %s", constants.ErrStatFile, err, file)
+		return constants.ErrStatFile
 	}
 	if checkPerms && stat.Mode() != os.FileMode(0600) {
 		log.Errorf("%s: want 0600 got %s", constants.ErrWrongPermissions, stat.Mode())

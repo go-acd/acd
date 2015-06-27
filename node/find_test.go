@@ -5,11 +5,14 @@ import "testing"
 func TestFindNode(t *testing.T) {
 	// tests are [path -> ID]
 	tests := map[string]string{
-		"/":                  "/",
-		"/README.md":         "/README.md",
-		"/rEaDme.MD":         "/README.md",
-		"/pictuREs":          "/pictures",
-		"/pictures/loGO.png": "/pictures/logo.png",
+		"/":                   "/",
+		"/README.md":          "/README.md",
+		"/rEaDme.MD":          "/README.md",
+		"//rEaDme.MD":         "/README.md",
+		"///REadmE.Md":        "/README.md",
+		"/pictuREs":           "/pictures",
+		"/pictures/loGO.png":  "/pictures/logo.png",
+		"/pictures//loGO.png": "/pictures/logo.png",
 	}
 
 	for path, ID := range tests {

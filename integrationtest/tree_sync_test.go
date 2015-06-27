@@ -45,7 +45,7 @@ func TestTreeSync(t *testing.T) {
 	io.Copy(inhash, in)
 	inmd5 := hex.EncodeToString(inhash.Sum(nil))
 	in.Seek(0, 0)
-	if err := c1.Upload(remoteReadmeFile, in); err != nil {
+	if err := c1.Upload(remoteReadmeFile, false, in); err != nil {
 		t.Errorf("error uploading %s to %s: %s", readmeFile, remoteReadmeFile, err)
 	}
 

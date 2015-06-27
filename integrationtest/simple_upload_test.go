@@ -41,7 +41,7 @@ func TestSimpleUpload(t *testing.T) {
 		t.Fatal(err)
 	}
 	in.Seek(0, 0)
-	if err := c.Upload(remoteReadmeFile, in); err != nil {
+	if err := c.Upload(remoteReadmeFile, false, in); err != nil {
 		t.Errorf("error uploading %s to %s: %s", readmeFile, remoteReadmeFile, err)
 	}
 
@@ -118,7 +118,7 @@ func Test0ByteUpload(t *testing.T) {
 	if err := c.FetchNodeTree(); err != nil {
 		t.Fatal(err)
 	}
-	if want, got := constants.ErrNoContentsToUpload, c.Upload(remoteZeroByteFile, in); want != got {
+	if want, got := constants.ErrNoContentsToUpload, c.Upload(remoteZeroByteFile, false, in); want != got {
 		t.Errorf("uploading a 0-byte file: want %s got %s", want, got)
 	}
 }

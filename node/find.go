@@ -1,6 +1,7 @@
 package node
 
 import (
+	"regexp"
 	"strings"
 
 	"gopkg.in/acd.v0/internal/constants"
@@ -11,10 +12,13 @@ import (
 // TODO(kalbasit): This does not perform well, this should be cached in a map
 // path->node and calculated on load (fresh, cache, refresh).
 func (nt *Tree) FindNode(path string) (*Node, error) {
+	// replace multiple n*/ with /
+	re := regexp.MustCompile("/[/]*")
+	path = string(re.ReplaceAll([]byte(path), []byte("/")))
 	// chop off the first /.
 	path = strings.TrimPrefix(path, "/")
+	// did we ask for the root node?
 	if path == "" {
-		// we asked for the root node, return it
 		return nt.Node, nil
 	}
 
