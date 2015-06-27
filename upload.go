@@ -123,7 +123,7 @@ func (c *Client) uploadFolderFunc(localPath, remoteBasePath string, recursive, o
 		}
 
 		f.Seek(0, 0)
-		if _, err := remoteNode.Upload(path.Base(fpath), f); err != nil {
+		if _, err := remoteNode.Upload(path.Base(fpath), f); err != nil && err != constants.ErrNoContentsToUpload {
 			return err
 		}
 

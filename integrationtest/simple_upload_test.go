@@ -6,6 +6,8 @@ import (
 	"io"
 	"os"
 	"testing"
+
+	"gopkg.in/acd.v0/internal/constants"
 )
 
 func TestSimpleUpload(t *testing.T) {
@@ -24,6 +26,7 @@ func TestSimpleUpload(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer in.Close()
 	inhash := md5.New()
 	in.Seek(0, 0)
 	io.Copy(inhash, in)
@@ -86,5 +89,36 @@ func TestSimpleUpload(t *testing.T) {
 
 	if want, got := inmd5, outmd5; want != got {
 		t.Errorf("c.Upload() hashes: want %s got %s", want, got)
+	}
+}
+
+func Test0ByteUpload(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping integration test")
+	}
+	needCleaning = true
+
+	var (
+		zeroByteFile       = "fixtures/0byte"
+		remoteZeroByteFile = remotePath(zeroByteFile)
+	)
+
+	// open the 0byte file
+	in, err := os.Open(zeroByteFile)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer in.Close()
+
+	// test uploading
+	c, err := newUncachedClient()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := c.FetchNodeTree(); err != nil {
+		t.Fatal(err)
+	}
+	if want, got := constants.ErrNoContentsToUpload, c.Upload(remoteZeroByteFile, in); want != got {
+		t.Errorf("uploading a 0-byte file: want %s got %s", want, got)
 	}
 }

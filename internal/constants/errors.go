@@ -62,6 +62,8 @@ var (
 	ErrCreatingWriterFromFile = errors.New("error creating a writer from a file")
 	// ErrWritingFileContents is returned if an error happens when writing the file contents
 	ErrWritingFileContents = errors.New("error writing the file contents")
+	// ErrNoContentsToUpload is returned if the reader does not even have one byte.
+	ErrNoContentsToUpload = errors.New("reader has not contents to upload")
 
 	// JSON errors
 

@@ -169,10 +169,18 @@ func (n *Node) bodyWriter(metadataJSON, name string, r io.Reader, bodyWriter io.
 		}
 		return
 	}
-	if _, err := io.Copy(part, r); err != nil {
+	count, err := io.Copy(part, r)
+	if err != nil {
 		log.Errorf("%s: %s", constants.ErrWritingFileContents, err)
 		select {
 		case errChan <- constants.ErrWritingFileContents:
+		default:
+		}
+		return
+	}
+	if count == 0 {
+		select {
+		case errChan <- constants.ErrNoContentsToUpload:
 		default:
 		}
 		return
