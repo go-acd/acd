@@ -3,20 +3,22 @@ package node
 import "testing"
 
 func TestFindNode(t *testing.T) {
-	tests := []string{
-		"/",
-		"/README.md",
-		"/pictures",
-		"/pictures/logo.png",
+	// tests are [path -> ID]
+	tests := map[string]string{
+		"/":                  "/",
+		"/README.md":         "/README.md",
+		"/rEaDme.MD":         "/README.md",
+		"/pictuREs":          "/pictures",
+		"/pictures/loGO.png": "/pictures/logo.png",
 	}
 
-	for _, test := range tests {
-		n, err := Mocked.FindNode(test)
+	for path, ID := range tests {
+		n, err := Mocked.FindNode(path)
 		if err != nil {
-			t.Errorf("MockNodeTree.FindNode(%q) error: %s", test, err)
+			t.Fatalf("MockNodeTree.FindNode(%q) error: %s", path, err)
 		}
-		if want, got := test, n.ID; want != got {
-			t.Errorf("MockNodeTree.FindNode(%q).ID: want %s got %s", test, want, got)
+		if want, got := ID, n.ID; want != got {
+			t.Errorf("MockNodeTree.FindNode(%q).ID: want %s got %s", path, want, got)
 		}
 	}
 }

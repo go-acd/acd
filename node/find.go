@@ -1,7 +1,6 @@
 package node
 
 import (
-	"os"
 	"strings"
 
 	"gopkg.in/acd.v0/internal/constants"
@@ -12,18 +11,15 @@ import (
 // TODO(kalbasit): This does not perform well, this should be cached in a map
 // path->node and calculated on load (fresh, cache, refresh).
 func (nt *Tree) FindNode(path string) (*Node, error) {
-	// chop off the first PathSeparator.
-	if strings.HasPrefix(path, string(os.PathSeparator)) {
-		path = path[1:]
+	// chop off the first /.
+	path = strings.TrimPrefix(path, "/")
+	if path == "" {
+		// we asked for the root node, return it
+		return nt.Node, nil
 	}
 
 	// initialize our search from the root node
 	node := nt.Node
-
-	// are we looking for the root node?
-	if path == "" {
-		return node, nil
-	}
 
 	// iterate over the path parts until we find the path (or not).
 	parts := strings.Split(path, "/")
@@ -31,7 +27,7 @@ func (nt *Tree) FindNode(path string) (*Node, error) {
 		var found bool
 		for _, n := range node.Nodes {
 			// does node.name matches our query?
-			if n.Name == part {
+			if strings.ToLower(n.Name) == strings.ToLower(part) {
 				node = n
 				found = true
 				break
