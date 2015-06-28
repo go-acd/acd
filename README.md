@@ -46,6 +46,6 @@ following:
 - [yadayada/acd_cli](https://github.com/yadayada/acd_cli)
 - [caseymrm/drivesink](https://github.com/caseymrm/drivesink)
 
-# License
+# License ![License](https://img.shields.io/badge/license-MIT-blue.svg?style=plastic)
 
-Refer to the LICENSE file.
+The MIT License (MIT) - see LICENSE for more details
