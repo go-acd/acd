@@ -1,6 +1,6 @@
 {
     "load": [
-        "../../github.com/dailymotion/arcanist-extensions"
+        "../../github.com/kalbasit/arcanist-go"
     ],
     "phabricator.uri": "http://phabricator.nasreddine.com/",
     "repository.callsign": "GOACD",
