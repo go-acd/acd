@@ -23,6 +23,7 @@ func New() *cli.App {
 	app := cli.NewApp()
 	app.Author = "Wael Nasreddine"
 	app.Email = "wael.nasreddine@gmail.com"
+	app.Version = "0.1.0"
 	app.EnableBashCompletion = true
 	app.Name = "acd"
 	app.Flags = []cli.Flag{

@@ -45,7 +45,7 @@ func TestMain(m *testing.M) {
 	testFolderPath = fmt.Sprintf("%s/%d", testFolderBasePath, time.Now().UnixNano())
 
 	// disable all logs
-	log.SetLevel(log.ErrorLevel)
+	log.SetLevel(log.DebugLevel)
 
 	// run all the tests
 	code := m.Run()

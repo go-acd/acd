@@ -43,7 +43,7 @@ func New(path string) (*Source, error) {
 // returning it.
 func (ts *Source) Token() (*oauth2.Token, error) {
 	if !ts.token.Valid() {
-		log.Debug("token is not valid")
+		log.Debug("token is not valid, it has probably expired")
 		if err := ts.refreshToken(); err != nil {
 			return nil, err
 		}
@@ -57,6 +57,7 @@ func (ts *Source) Token() (*oauth2.Token, error) {
 }
 
 func (ts *Source) readToken() error {
+	log.Debugf("reading the token from %s", ts.path)
 	f, err := os.Open(ts.path)
 	if err != nil {
 		log.Errorf("%s: %s", constants.ErrOpenFile, ts.path)
@@ -67,10 +68,12 @@ func (ts *Source) readToken() error {
 		return constants.ErrJSONDecoding
 	}
 
+	log.Debug("token loaded successfully")
 	return nil
 }
 
 func (ts *Source) saveToken() error {
+	log.Debugf("saving the token to %s", ts.path)
 	f, err := os.Create(ts.path)
 	if err != nil {
 		log.Errorf("%s: %s", constants.ErrCreateFile, ts.path)
@@ -81,34 +84,35 @@ func (ts *Source) saveToken() error {
 		return constants.ErrJSONEncoding
 	}
 
+	log.Debug("token saved successfully")
 	return nil
 }
 
 func (ts *Source) refreshToken() error {
+	log.Debugf("refreshing the token from %q", refreshURL)
+
 	data, err := json.Marshal(ts.token)
 	if err != nil {
 		log.Errorf("%s: %s", constants.ErrJSONEncoding, err)
 		return constants.ErrJSONEncoding
 	}
-
 	req, err := http.NewRequest("POST", refreshURL, bytes.NewBuffer(data))
 	if err != nil {
 		log.Errorf("%s: %s", constants.ErrCreatingHTTPRequest, err)
 		return constants.ErrCreatingHTTPRequest
 	}
-
 	req.Header.Set("Content-Type", "application/json")
 	res, err := (&http.Client{}).Do(req)
 	if err != nil {
 		log.Errorf("%s: %s", constants.ErrDoingHTTPRequest, err)
 		return constants.ErrDoingHTTPRequest
 	}
-
 	defer res.Body.Close()
 	if err := json.NewDecoder(res.Body).Decode(ts.token); err != nil {
 		log.Errorf("%s: %s", constants.ErrJSONDecodingResponseBody, err)
 		return constants.ErrJSONDecodingResponseBody
 	}
+	log.Debug("token was refreshed successfully")
 
 	return nil
 }

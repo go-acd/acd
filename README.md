@@ -1,22 +1,32 @@
 # Amazon Cloud Drive client for Go
 [![Build Status](https://travis-ci.org/go-acd/acd.svg?branch=master)](https://travis-ci.org/go-acd/acd) [![GoDoc](https://godoc.org/gopkg.in/acd.v0?status.png)](https://godoc.org/gopkg.in/acd.v0)
 
+Amazon Cloud Drive uses
+[oAuth 2.0 for authentication](https://developer.amazon.com/public/apis/experience/cloud-drive/content/restful-api-getting-started).
+The [token server](https://github.com/go-acd/token-server) takes care of
+the oAuth authentication. For your convenience, an instance of the
+server is deployed at:
+
+https://go-acd.appspot.com
+
 # Install
 
-To install, run
+This project is go-gettable:
 
 ```
 go get gopkg.in/acd.v0/...
 ```
 
-This will install the `acd` command.
-
 # Usage
 
+In order to use this library, you must authenticate through the [token server](https://go-acd.appspot.com).
+
 ## CLI
+
 Run `acd help` for usage.
 
 ## Library
+
 Consult the [Godoc](https://godoc.org/gopkg.in/acd.v0) for information
 on how to use the library.
 
