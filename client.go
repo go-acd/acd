@@ -97,7 +97,11 @@ func New(configFile string) (*Client, error) {
 
 // Close finalizes the acd.
 func (c *Client) Close() error {
-	return c.NodeTree.Close()
+	if c.NodeTree != nil {
+		return c.NodeTree.Close()
+	}
+
+	return nil
 }
 
 // Do invokes net/http.Client.Do(). Refer to net/http.Client.Do() for documentation.
