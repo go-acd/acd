@@ -13,17 +13,17 @@ import (
 	"gopkg.in/acd.v0/internal/log"
 )
 
-const refreshURL = "https://go-acd.appspot.com/refresh"
-
 // Source provides a Source with support for refreshing from the acd server.
 type Source struct {
 	path  string
 	token *oauth2.Token
+
+	refreshURL string
 }
 
 // New returns a new Source implementing oauth2.TokenSource. The path must
 // exist on the filesystem and must be of permissions 0600.
-func New(path string) (*Source, error) {
+func New(refreshURL, path string) (*Source, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		log.Errorf("%s: %s", constants.ErrFileNotFound, path)
 		return nil, constants.ErrFileNotFound
@@ -32,6 +32,7 @@ func New(path string) (*Source, error) {
 	ts := &Source{
 		path:  path,
 		token: new(oauth2.Token),
+		refreshURL: refreshURL,
 	}
 	ts.readToken()
 
@@ -89,14 +90,14 @@ func (ts *Source) saveToken() error {
 }
 
 func (ts *Source) refreshToken() error {
-	log.Debugf("refreshing the token from %q", refreshURL)
+	log.Debugf("refreshing the token from %q", ts.refreshURL)
 
 	data, err := json.Marshal(ts.token)
 	if err != nil {
 		log.Errorf("%s: %s", constants.ErrJSONEncoding, err)
 		return constants.ErrJSONEncoding
 	}
-	req, err := http.NewRequest("POST", refreshURL, bytes.NewBuffer(data))
+	req, err := http.NewRequest("POST", ts.refreshURL, bytes.NewBuffer(data))
 	if err != nil {
 		log.Errorf("%s: %s", constants.ErrCreatingHTTPRequest, err)
 		return constants.ErrCreatingHTTPRequest
