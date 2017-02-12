@@ -29,7 +29,7 @@ $ $GOPATH/bin/acd ls acd://
 Example output:
 
 ```
-Backups Archived Music Pictures My Send-to-Kindle Docs
+"Archived Music" "Pictures" "My Send-to-Kindle Docs" "test-file-with-quote\""
 ```
 
 You may run `acd help` for additional usage information.
