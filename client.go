@@ -35,6 +35,9 @@ type (
 		// will cancel the request and return. A timeout of 0 (the default) means
 		// no timeout. See http://godoc.org/net/http#Client for more information.
 		Timeout time.Duration `json:"timeout"`
+
+		// Oauth2RefreshURL OAuth2 token server
+		Oauth2RefreshURL string `json:"oauth2RefreshURL"`
 	}
 
 	// Client provides a client for Amazon Cloud Drive.
@@ -58,7 +61,10 @@ type (
 	}
 )
 
-const endpointURL = "https://drive.amazonaws.com/drive/v1/account/endpoint"
+const (
+	endpointURL = "https://drive.amazonaws.com/drive/v1/account/endpoint"
+	defaultOauth2RefreshUrl = "https://go-acd.appspot.com/refresh"
+)
 
 // New returns a new Amazon Cloud Drive "acd" Client. configFile must exist and must be a valid JSON decodable into Config.
 func New(configFile string) (*Client, error) {
@@ -67,10 +73,11 @@ func New(configFile string) (*Client, error) {
 		return nil, err
 	}
 
-	ts, err := token.New(config.TokenFile)
+	ts, err := token.New(config.Oauth2RefreshURL, config.TokenFile)
 	if err != nil {
 		return nil, err
 	}
+
 	c := &Client{
 		config:    config,
 		cacheFile: config.CacheFile,
@@ -109,11 +116,17 @@ func loadConfig(configFile string) (*Config, error) {
 		log.Errorf("%s: %s", constants.ErrOpenFile, err)
 		return nil, err
 	}
+
 	defer cf.Close()
+
 	var config Config
 	if err := json.NewDecoder(cf).Decode(&config); err != nil {
 		log.Errorf("%s: %s", constants.ErrJSONDecoding, err)
 		return nil, err
+	}
+
+	if config.Oauth2RefreshURL == "" {
+		config.Oauth2RefreshURL = defaultOauth2RefreshUrl
 	}
 
 	// validate the token file
