@@ -91,7 +91,9 @@ func lsLong(nodes node.Nodes) {
 func lsShort(nodes node.Nodes) {
 	sep := ""
 	for _, n := range nodes {
-		fmt.Printf("%s%s", sep, n.Name)
+		name := strings.Replace(n.Name, "\\", "\\\\", -1)
+		name = strings.Replace(name, "\"", "\\\"", -1)
+		fmt.Printf("%s\"%s\"", sep, name)
 		sep = " "
 	}
 	fmt.Println("")
